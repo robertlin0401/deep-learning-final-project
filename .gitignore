@@ -1,0 +1,10 @@
+data/
+classes.txt
+
+*/__pycache__
+src/test.py
+
+venv/
+
+yolov5/*
+!yolov5/data/airdrone.yaml
