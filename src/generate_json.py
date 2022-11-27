@@ -1,6 +1,8 @@
 import json
 import os
 
+from label_processor import convert_label_from_yolo
+
 import hyps
 
 ###########################################################
@@ -13,7 +15,7 @@ for i in range(0, hyps.img_height - hyps.cropped_img_size + hyps.window_size, hy
 
 ###########################################################
 
-root_path = 'label_path/'
+root_path = 'data/results/'
 
 label_path = [os.path.join(root_path, i) for i in os.listdir(root_path)]
 
@@ -21,8 +23,10 @@ dict = {}
 last_img_name = ""
 for path in label_path:
     with open(path, 'r') as f:
-        labels = f.read().split('\n')
-        labels = [x.split(",") for x in labels]
+        labels = f.read().split('\n')[:-1]
+        labels = [x.split(" ") for x in labels]
+        labels = [[float(i) for i in label] for label in labels]
+        labels = convert_label_from_yolo(labels)
         f.close()
     
     file_name = path.split('/')[-1]
@@ -30,18 +34,17 @@ for path in label_path:
     cropped_img_id = file_name.split('_')[1].split('.')[0]
 
     if last_img_name != img_name:
-        last_img_name = img_name
         if dict != {}:
-            with open(root_path + img_name + '.json', 'w') as f:
+            with open(root_path + last_img_name + '.json', 'w') as f:
                 json.dump(dict, f)
             dict = {}
+        last_img_name = img_name
     
     if not file_name in dict:
         dict[file_name] = {}
         dict[file_name]["images"] = {}
         dict[file_name]["images"]["id"] = img_name
         dict[file_name]["images"]["img_name"] = os.path.join(root_path.replace("label", "image"), img_name)
-        dict[file_name]["images"]["img_place"] = "?"
         dict[file_name]["annotations"] = []
     
     for label in labels:
@@ -54,3 +57,7 @@ for path in label_path:
         temp["new_ori"] = coordinates[int(cropped_img_id)-1]
         temp["[probability]"] = float(p)
         dict[file_name]["annotations"].append(temp)
+
+if dict != {}:
+    with open(root_path + last_img_name + '.json', 'w') as f:
+        json.dump(dict, f)

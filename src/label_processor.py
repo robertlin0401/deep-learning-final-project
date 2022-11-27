@@ -113,7 +113,8 @@ def convert_label_from_yolo(labels):
     labels[:, 1] = labels[:, 1] - (labels[:, 3] / 2)
     labels[:, 2] = labels[:, 2] - (labels[:, 4] / 2)
 
-    labels = [[int(i) for i in label] for label in labels]
+    for j in range(5):
+        labels[:, j] = [int(i) for i in labels[:, j]]
 
     return labels
 
