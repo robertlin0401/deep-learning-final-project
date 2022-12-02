@@ -11,7 +11,7 @@ def read_label_file(f):
 ###########################################################
 
 def node_in_bbox(bbox, coordinate):
-    ratio = 0.5
+    ratio = 0.8
 
     x1 = coordinate[0]
     x2 = coordinate[0] + hyps.cropped_img_size

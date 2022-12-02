@@ -40,6 +40,14 @@ for label_dir in [label_train, label_val, label_test]:
         for label in labels:
             if not int(label[3]) > 0 or not int(label[4]) > 0:
                 continue
+            if not hyps.use_cls0_flag and int(label[0]) == 0:
+                continue
+            if not hyps.use_cls1_flag and int(label[0]) == 1:
+                continue
+            if not hyps.use_cls2_flag and int(label[0]) == 2:
+                continue
+            if not hyps.use_cls3_flag and int(label[0]) == 3:
+                continue
             for i, coordinate in enumerate(coordinates):
                 if node_in_bbox(label[1:], coordinate):
                     annotations[i]["cls"].append(label[0])

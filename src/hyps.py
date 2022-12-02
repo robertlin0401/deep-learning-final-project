@@ -1,7 +1,7 @@
 img_height = 1080
 img_width = 1920
 
-cropped_img_size = 120
+cropped_img_size = 240
 window_size = 60
 
 label_id_mapping = {
@@ -12,3 +12,7 @@ label_id_mapping = {
 }
 
 use_unlabeled_flag = 0
+use_cls0_flag = 0
+use_cls1_flag = 0
+use_cls2_flag = 1
+use_cls3_flag = 1
